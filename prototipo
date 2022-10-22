@@ -1,0 +1,220 @@
+package a;
+import java.util.ArrayList;
+
+
+abstract class Bebida{
+    public Bebida(){
+    }
+    public String beber(){
+        return "sabor: ";
+    }
+}
+class Sprite extends Bebida{
+    public Sprite(){
+    }
+    @Override
+    public String beber(){
+        return super.beber()+"sprite";
+    }
+}
+class CocaCola extends Bebida{
+    public CocaCola(){
+    }
+    @Override
+    public String beber(){
+        return super.beber()+"cocacola";
+    }
+}
+class Fanta extends Bebida{
+    public Fanta(){
+    }
+    @Override
+    public String beber(){
+        return super.beber()+"fanta";
+    }
+}
+class Mineral extends Bebida{
+    public Mineral(){
+    }
+    @Override
+    public String beber(){
+        return super.beber()+"agua mineral";
+    }
+}
+
+class Deposito {
+
+    private ArrayList<Bebida> derp;
+
+    public Deposito() {
+
+        derp = new ArrayList();
+    }
+
+    public void addBebida(Bebida esta) {
+
+        derp.add(esta);
+    }
+
+    public Bebida getBebida() throws NoHayBebidaException {
+        if (derp.size() == 0) {
+            throw new NoHayBebidaException("No Disponible en este momento");
+        }
+        Bebida b = derp.remove(0);
+
+        return b;
+    }
+
+}
+class Depocoin{
+
+    private ArrayList<Moneda> monedero;
+
+    public Depocoin() {
+
+        monedero = new ArrayList();
+    }
+
+   
+    public void newCoin() {
+        
+        monedero.add(new Moneda100());
+    }
+    
+    public Moneda getCoin() {
+        if (monedero.size() == 0) {
+            return null;
+        }
+        Moneda x = monedero.remove(0);
+
+        return x;
+    }
+
+}
+class Expendedora{
+    
+    Deposito Coca;
+    Deposito Spritex;
+    Deposito Mine;
+    Deposito Fantax;
+    Depocoin caja;
+    
+    int precioCoca;
+    int precioSprite;
+    int precioMine;
+    int precioFanta;
+    
+    
+    public Expendedora(int cantidad, int precioCoca, int precioSprite, int precioFanta, int precioMineral){
+        
+        Coca = new Deposito();
+        Spritex = new Deposito();
+        Mine = new Deposito();
+        Fantax = new Deposito();
+        caja = new Depocoin();
+        
+        for (int i = 0; i < cantidad; i++) {
+            Coca.addBebida(new CocaCola());
+        }
+        for (int i = 0; i < cantidad; i++) {
+            Spritex.addBebida(new Sprite());
+        }
+        for (int i = 0; i < cantidad; i++) {
+            Mine.addBebida(new Mineral());
+        }
+        for (int i = 0; i < cantidad; i++) {
+            Fantax.addBebida(new Fanta());
+        }
+        
+    }
+    
+    public Bebida comprarBebida(Moneda coin, int seleccion) throws PagoInsuficienteException, PagoIncorrectoException, NoHayBebidaException{
+        
+        switch(seleccion){
+            
+            case default: 
+                throw new NoHayBebidaException("Seleccion Incorrecta"); 
+            case 1:
+                
+                if(checkprice(coin, precioCoca) == true){
+                    return Coca.getBebida();
+                }
+                
+            case 2:
+                if(checkprice(coin, precioFanta) == true){
+                    return Coca.getBebida();
+                }
+                
+            case 3:
+                if(checkprice(coin, precioSprite) == true){
+                    return Coca.getBebida();
+                }
+            
+            case 4:
+                if(checkprice(coin, precioMine) == true){
+                    return Coca.getBebida();
+                }
+            
+               
+        }
+        System.out.println("Bandera");
+        return null;
+    }
+    
+    public boolean checkprice(Moneda coin, int precio) throws PagoInsuficienteException, PagoIncorrectoException {
+        
+        if(coin == null){
+            throw new PagoIncorrectoException("Moneda no Ingresada");
+        }
+        if(coin.getValor() >= precio){
+            return true;
+        }else{
+            throw new PagoInsuficienteException("Pago Insuficiente");
+        }
+        
+    }
+        
+    
+}
+
+class Comprador{
+    private int vuelto;
+    private String sabor;
+    
+    
+    public Comprador(Expendedora quiosco, Moneda coin, int seleccion){
+        Bebida botella = null;
+        try{
+            botella = quiosco.comprarBebida(coin, seleccion);
+            sabor = botella.beber();
+        }catch(PagoIncorrectoException e){
+            System.out.println(e.getMessage());
+            sabor = null;
+        }catch(PagoInsuficienteException e){
+            System.out.println(e.getMessage());
+            sabor = null;
+        }catch (NoHayBebidaException e){
+            System.out.println(e.getMessage());
+            sabor = null;
+        }
+         
+        
+        
+    }
+    public String getSabor(){
+        return sabor;
+    }
+}
+public class A {
+    
+    
+    
+    public static void main(String[] args) {
+       
+        Expendedora prueba = new Expendedora(0,600,700,500,400);
+        Moneda1000 billete = new Moneda1000();
+        Comprador jimmy = new Comprador(prueba, billete, 2);
+        System.out.println(jimmy.getSabor());
+    }
+    
+}
