@@ -56,9 +56,9 @@ class Deposito {
         derp.add(esta);
     }
 
-    public Bebida getBebida() throws NoHayBebidaException {
+    public Bebida getBebida() {
         if (derp.size() == 0) {
-            throw new NoHayBebidaException("No Disponible en este momento");
+            return null;
         }
         Bebida b = derp.remove(0);
 
@@ -75,7 +75,10 @@ class Depocoin{
         monedero = new ArrayList();
     }
 
-   
+    
+    public void returncoin(Moneda coin){
+        monedero.add(coin);
+    }
     public void newCoin() {
         
         monedero.add(new Moneda100());
@@ -130,29 +133,51 @@ class Expendedora{
     
     public Bebida comprarBebida(Moneda coin, int seleccion) throws PagoInsuficienteException, PagoIncorrectoException, NoHayBebidaException{
         
+        Bebida b = null;
         switch(seleccion){
             
             case default: 
+                caja.returncoin(coin);
                 throw new NoHayBebidaException("Seleccion Incorrecta"); 
             case 1:
                 
                 if(checkprice(coin, precioCoca) == true){
-                    return Coca.getBebida();
+                    b = Coca.getBebida();
+                    if(b == null){
+                        throw new NoHayBebidaException("No Disponible en este momento");
+                    }
+                    llenarVuelto(coin, precioCoca);
+                    return b;
                 }
                 
             case 2:
                 if(checkprice(coin, precioFanta) == true){
-                    return Coca.getBebida();
+                    b = Fantax.getBebida();
+                    if(b == null){
+                        throw new NoHayBebidaException("No Disponible en este momento");
+                    }
+                    llenarVuelto(coin, precioFanta);
+                    return b;
                 }
                 
             case 3:
                 if(checkprice(coin, precioSprite) == true){
-                    return Coca.getBebida();
+                    b = Spritex.getBebida();
+                    if(b == null){
+                        throw new NoHayBebidaException("No Disponible en este momento");
+                    }
+                    llenarVuelto(coin, precioSprite);
+                    return b ;
                 }
             
             case 4:
                 if(checkprice(coin, precioMine) == true){
-                    return Coca.getBebida();
+                    b = Mine.getBebida();
+                    if(b == null){
+                        throw new NoHayBebidaException("No Disponible en este momento");
+                    }
+                    llenarVuelto(coin, precioMine);
+                    return b;
                 }
             
                
@@ -169,11 +194,22 @@ class Expendedora{
         if(coin.getValor() >= precio){
             return true;
         }else{
+            caja.returncoin(coin);
             throw new PagoInsuficienteException("Pago Insuficiente");
+            
         }
         
     }
-        
+    
+    public void llenarVuelto(Moneda coin, int eleccion){
+        int p = (eleccion - coin.getValor()) / 100;
+        for (int i = 0; i < p; i++) {
+            caja.newCoin();
+        }
+    }
+    public Moneda getVuelto(){
+        return caja.getCoin();
+    }
     
 }
 
@@ -184,6 +220,8 @@ class Comprador{
     
     public Comprador(Expendedora quiosco, Moneda coin, int seleccion){
         Bebida botella = null;
+        vuelto = 0;
+        Moneda x;
         try{
             botella = quiosco.comprarBebida(coin, seleccion);
             sabor = botella.beber();
@@ -197,12 +235,21 @@ class Comprador{
             System.out.println(e.getMessage());
             sabor = null;
         }
-         
+        do{
+            x = quiosco.getVuelto();
+            if(x != null){
+                vuelto = vuelto + x.getValor();
+            }
+            
+        }while(x != null);
         
         
     }
     public String getSabor(){
         return sabor;
+    }
+    public int cuantoVuelto(){
+        return vuelto;
     }
 }
 public class A {
@@ -211,10 +258,11 @@ public class A {
     
     public static void main(String[] args) {
        
-        Expendedora prueba = new Expendedora(0,600,700,500,400);
+        Expendedora prueba = new Expendedora(2,600,700,500,400);
         Moneda1000 billete = new Moneda1000();
         Comprador jimmy = new Comprador(prueba, billete, 2);
         System.out.println(jimmy.getSabor());
+        System.out.println(jimmy.cuantoVuelto());
     }
     
 }
