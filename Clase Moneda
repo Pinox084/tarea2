@@ -1,11 +1,9 @@
-package claseexpendedor;
-
-
 public abstract class Moneda {
     public Moneda(){}
     public int getValor(){
         return 0;
     }
+    
 }
 class Moneda1000 extends Moneda{
     public Moneda1000(){
@@ -14,30 +12,29 @@ class Moneda1000 extends Moneda{
     public int getValor(){
         return super.getValor()+1000;
     }
-    @Override
-    public String toString(){
-       return this + "1000";
+    public String getSerie(){
+        return this.toString();
     }
 }
 class Moneda500 extends Moneda{
     public Moneda500(){
     }
-    public int valor(){
+    @Override
+    public int getValor(){
         return super.getValor()+500;
     }
-    @Override
-    public String toString(){
-       return this + "500";
+    public String getSerie(){
+        return this.toString();
     }
+    
 }
 class Moneda100 extends Moneda{
     public Moneda100(){
     }
-    public int valor(){
+    public int getValor(){
         return super.getValor()+100;
     }
-    @Override
-    public String toString(){
-       return this + "100";
+    public String getSerie(){
+        return this.toString();
     }
 }
