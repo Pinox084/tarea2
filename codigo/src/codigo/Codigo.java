@@ -36,5 +36,10 @@ public class Codigo {
         System.out.println(jimpierre.getSabor());
         System.out.println("Vuelto :" + jimpierre.cuantoVuelto());
         System.out.println("_____________");
+        
+        Comprador jhonny= new Comprador(prueba, billete1000, 1);
+        System.out.println(jhonny.getSabor());
+        System.out.println("Vuelto :" + jhonny.cuantoVuelto());
+        System.out.println("_____________");
     }
 }
