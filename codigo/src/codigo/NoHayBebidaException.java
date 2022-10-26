@@ -1,13 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package codigo;
 
-/**
- *
- * @author Nicolás
- */
-public class NoHayBebidaException {
-    
+public class NoHayBebidaException extends Exception{
+    NoHayBebidaException(String e){
+        
+        super(e);
+    }
 }
