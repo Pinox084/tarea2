@@ -45,7 +45,7 @@ public class Expendedora {
         Bebida b = null;
         switch(seleccion){
             
-            case default: 
+            default: 
                 caja.returncoin(coin);
                 throw new NoHayBebidaException("Seleccion Incorrecta"); 
             case 1:
